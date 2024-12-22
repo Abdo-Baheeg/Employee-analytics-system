@@ -7,25 +7,16 @@ template <typename datatype>
 inline bool BST< datatype>::empty(){return root==0;}
 
 template <typename datatype>
-bool  BST< datatype>::  searchAux(BST<datatype>::BNodeptr currentptr,const datatype value)
+bool  BST< datatype>::  searchAux(BST<datatype>::NodePtr currentptr,const datatype value)
 {
-   if(currentptr==nullptr){return false;}
-if(currentptr->data <value)
-    {   
-
+    if(currentptr==nullptr){return false;}
+    if(currentptr->data <value)
         return searchAux(currentptr->right,value);
-    }
     else if(currentptr->data >value)
-
-     return searchAux(currentptr->left,value);
-     else {
-        return true;
-     }
-
-
-
-
-    }
+        return searchAux(currentptr->left,value);
+    else
+       return true;
+}
 
 template <typename datatype>
 bool BST< datatype>:: search( datatype value)
@@ -136,19 +127,18 @@ datatype BST< datatype>:: minValue(BNodeptr& root)
     searchAux(root->left,value);
     }
     return value;
-    
 
 }
 
 template <typename datatype>
-datatype BST< datatype>::maxValue(BNodeptr& root)
-{
-    while(root!=nullptr)
-    {
-    searchAux(root->right,value);
+datatype BST< datatype>::maxValue(NodePtr& root){
+    NodePtr temp=root;
+    if(root!=nullptr){
+      while(temp->right!=nullptr){
+        temp=temp->right;
+      }
+      return temp->data;
     }
-    return value;
-    
 }
 
 
