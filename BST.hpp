@@ -1,10 +1,15 @@
 #ifndef BST_H
 #define BST_H
 #include <iostream>
+#include <map>
+#include <vector>
 using namespace std;
 
 template <typename datatype>
 class BST{
+    private:
+    void collectTopIncomes(NodePtr root, vector<datatype>& topEmployees, int& count);
+
 public:
     BST(){};
     bool empty();
@@ -15,8 +20,19 @@ public:
     void preorder(ostream&out);
     void postorder(ostream&out);
 
-private:
- class EmployeeNode{
+    // 4,5,6 queries
+    //double averageIncomeUnderAge(NodePtr root, int age, map<NodePtr, pair<double, int>>& memo);
+    double averageIncomeUnderAge(NodePtr root, int age, std::map<NodePtr, std::pair<double, int>>& memo);
+    float findMedianPerformance(NodePtr root, map<NodePtr, vector<float>>& memo);
+    void collectTopIncomes(NodePtr root, vector<datatype>& topEmployees, int& count);
+    void top3HighestIncome(NodePtr root, vector<datatype>& topEmployees, int& count);
+
+
+
+
+  private:
+    class EmployeeNode
+    {
     public:
         datatype data;
         int age;           // Age of the employee
@@ -41,8 +57,6 @@ void postorderAux(ostream& out, BST<datatype>::NodePtr subtreePtr);
 
 datatype minValue(NodePtr& root);
 datatype maxValue(NodePtr& root);
-
-
 
 };
 

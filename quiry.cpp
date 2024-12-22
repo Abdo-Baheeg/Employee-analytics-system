@@ -9,8 +9,6 @@ struct Employee {
     int performanceScore;  // Performance score
 };
 
-
-
 //                    from Quiry 8 -> 12
 //-------------------------------------------------------------------
 
