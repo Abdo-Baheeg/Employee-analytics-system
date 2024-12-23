@@ -7,7 +7,7 @@ template <typename datatype>
 inline bool BST< datatype>::empty(){return root==0;}
 
 template <typename datatype>
-bool  BST< datatype>::  searchAux(BST<datatype>::NodePtr currentptr,const datatype value)
+bool  BST< datatype>::searchAux(BST<datatype>::NodePtr currentptr,const datatype value)
 {
     if(currentptr==nullptr){return false;}
     if(currentptr->data <value)

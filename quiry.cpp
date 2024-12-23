@@ -1,5 +1,6 @@
 #include<iostream>
 #include"BST.hpp"
+#include "vector.hpp"
 using namespace std;
 
 //employee info peter had to use 
@@ -10,6 +11,31 @@ struct Employee {
 };
 
 
+//------------------------------------------------------------------
+//Query 1: Maximum income in a specific age range
+template <typename type>
+double BST<type>::maxIncomeinAge(int a, Vector <double>& memo){
+    if (memo[a] != -1)          // If value is already computed, return it
+        return memo[a];
+    
+}
+
+//Query 2: Total Performance Score Below a Certain Age
+template <typename type>
+int BST<type>::totalPerformancebelowAge(int a, Vector<int>& memo){
+    if (memo[a] != -1)          // If value is already computed, return it
+        return memo[a];
+
+}
+
+//Query 3: Count of Employees in a Specific Age Range
+template <typename type>
+int BST<type>::employeesCountinAge(int a, Vector<int>& memo){
+    if (memo[a] != -1)
+        return memoa[a];
+        
+    
+}
 
 //                    from Quiry 8 -> 12
 //-------------------------------------------------------------------
