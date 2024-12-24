@@ -1,49 +1,58 @@
 #ifndef BST_H
 #define BST_H
+
 #include <iostream>
-using namespace std;
 
-template <typename datatype>
-class BST{
-public:
-    BST(){};
-    bool empty();
-    void insert( datatype value);
-    void erase( datatype &value);
-    bool search( datatype value);
-    void inorder(ostream&out);
-    void preorder(ostream&out);
-    void postorder(ostream&out);
-
+class BST {
 private:
- class EmployeeNode{
+    // Node class definition
+    class Node {
     public:
-        datatype data;
-        int age;           // Age of the employee
-        double income;         // Monthly income
-        float performanceScore;  // Performance score
-        EmployeeNode *left;
-        EmployeeNode *right;
-        EmployeeNode(datatype value): data(value),left(nullptr),right(nullptr){};
-        EmployeeNode():left(nullptr),right(nullptr){};
+        int key;
+        Vector<Employee> Employees;
+        Node* left;
+        Node* right;
 
+    };
+
+    // Typedef for convenience
+    using NodePtr = Node*;
+
+    NodePtr root; // Root of the BST
+
+    // Helper functions (private)
+    void insertAux(NodePtr& subtree, const T& value);
+    bool searchAux(NodePtr subtree, const T& value) const;
+    void inorderAux(std::ostream& out, NodePtr subtree) const;
+    void preorderAux(std::ostream& out, NodePtr subtree) const;
+    void postorderAux(std::ostream& out, NodePtr subtree) const;
+    NodePtr eraseAux(NodePtr subtree, const T& value);
+    NodePtr findMin(NodePtr subtree) const;
+    NodePtr findMax(NodePtr subtree) const;
+
+public:
+    // Constructor
+    BST() : root(nullptr) {}
+
+    // Check if the tree is empty
+    bool empty() const;
+
+    // Public interface for insertion, deletion, and search
+    void insert(const T& value);
+    void erase(const T& value);
+    bool search(const T& value) const;
+
+    // Traversal functions
+    void inorder(std::ostream& out) const;
+    void preorder(std::ostream& out) const;
+    void postorder(std::ostream& out) const;
+
+    // Utility functions
+    T minValue() const;
+    T maxValue() const;
+
+    void print(std::ostream& out)const;
 };
-typedef EmployeeNode* NodePtr; ;
-NodePtr root{};
 
 
-
-void  insertAux(BST<datatype>::NodePtr &root, datatype &value);
-bool searchAux(BST<datatype>::NodePtr &root, datatype& value);
-void inorderAux(ostream& out, BST<datatype>::NodePtr subtreePtr);
-void preorderAux(ostream& out, BST<datatype>::NodePtr subtreePtr);
-void postorderAux(ostream& out, BST<datatype>::NodePtr subtreePtr);
-
-datatype minValue(NodePtr& root);
-datatype maxValue(NodePtr& root);
-
-
-
-};
-
-#endif BST_H
+#endif

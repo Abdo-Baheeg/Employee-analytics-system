@@ -1,147 +1,173 @@
-#include "BST.hpp"
-#include <iostream>
-using namespace std;
+#include<iostream>
+#include"BST.hpp"
 
+//BST Implementation
 
-template <typename datatype>
-inline bool BST< datatype>::empty(){return root==0;}
-
-template <typename datatype>
-bool  BST< datatype>::  searchAux(BST<datatype>::NodePtr currentptr,const datatype value)
-{
-    if(currentptr==nullptr){return false;}
-    if(currentptr->data <value)
-        return searchAux(currentptr->right,value);
-    else if(currentptr->data >value)
-        return searchAux(currentptr->left,value);
-    else
-       return true;
+// Check if the tree is empty
+template <typename T>
+bool BST<T>::empty() const {
+    return root == nullptr;
 }
 
-template <typename datatype>
-bool BST< datatype>:: search( datatype value)
-{
-     return searchAux(currentptr,value);
+// Insert a value into the BST
+template <typename T>
+void BST<T>::insert(const T& value) {
+    insertAux(root, value);
 }
 
-template <typename datatype>
-void BST<datatype>::insertAux(BST<datatype>::BNodeptr root, datatype value)
-{
-  BNodeptr  newnode=new BST< datatype>:: BNodeptr(value);
-if(empty())
-{
-    root= newnode(value);
-
-}
- if(value < root->data){
-    if(root->left==nullptr)
-    {
-       root->left  =newnode(value);
+template <typename T>
+void BST<T>::insertAux(NodePtr& subtree, const T& value) {
+    if (!subtree) {
+        subtree = new Node(value);
+    } else if (value < subtree->data) {
+        insertAux(subtree->left, value);
+    } else if (value > subtree->data) {
+        insertAux(subtree->right, value);
     }
-    insert(value,root->left);
 }
-else if(value >root->data)
-{
-    if(root->right==nullptr)
-    {
-        root->right=newnode(value);
+
+// Search for a value in the BST
+template <typename T>
+bool BST<T>::search(const T& value) const {
+    return searchAux(root, value);
+}
+
+template <typename T>
+bool BST<T>::searchAux(NodePtr subtree, const T& value) const {
+    if (!subtree) {
+        return false;
     }
-    insert(root->right,value);
-}
-else {
-    cerr<<"Item already exists ";
-}
-}
-
-template <typename datatype>
-void BST<datatype>::  insert(const datatype value)
-{
-    return insertAux(root,value);
+    if (value == subtree->data) {
+        return true;
+    } else if (value < subtree->data) {
+        return searchAux(subtree->left, value);
+    } else {
+        return searchAux(subtree->right, value);
+    }
 }
 
-template <typename datatype>
-void BST<datatype>::erase(const datatype& item) {
+// Erase a value from the BST
+template <typename T>
+void BST<T>::erase(const T& value) {
+    root = eraseAux(root, value);
+}
 
-    bool found;
-    BST<datatype>::BNodeptr deletednode, parent; 
-    serachAux(parent,value);
-
-    if (!found) {
-        cout << "value not found \n";
-        return;
+template <typename T>
+typename BST<T>::NodePtr BST<T>::eraseAux(NodePtr subtree, const T& value) {
+    if (!subtree) {
+        return nullptr;
     }
 
-    if (deletednode->left != 0 && deletednode->right != 0) { 
-
-       
-        BST<datatype>::BinNodePointer deletednodeSuc = deletednode->right;
-        parent = deletednode;
-        while (deletednodeSuc->left != 0) { 
-            parent = deletednodeSuc;
-            deletednodeSuc = deletednodeSuc->left;
+    if (value < subtree->data) {
+        subtree->left = eraseAux(subtree->left, value);
+    } else if (value > subtree->data) {
+        subtree->right = eraseAux(subtree->right, value);
+    } else {
+        // Node with only one child or no child
+        if (!subtree->left) {
+            NodePtr temp = subtree->right;
+            delete subtree;
+            return temp;
+        } else if (!subtree->right) {
+            NodePtr temp = subtree->left;
+            delete subtree;
+            return temp;
         }
 
-        deletednode->data = deletednodeSuc->data;
-        deletednode = deletednodeSuc;
+        // Node with two children: Get the inorder successor
+        NodePtr temp = findMin(subtree->right);
+        subtree->data = temp->data;
+        subtree->right = eraseAux(subtree->right, temp->data);
     }
-
- 
-    BST<datatype>::BinNodePointer subtree = deletednode->left;
-    if (subtree == 0) subtree = deletednode->right;
-
-
-    if (parent == 0) myRoot = subtree;
-
-    else if (parent->left == deletednode) parent->left = subtree;
-
-    else parent->right = subtree;
-    delete deletednode;
+    return subtree;
 }
 
-
-
-template <typename datatype>
-void BST< datatype>:: inorder(ostream&out)
-{
-
-}
-
-template <typename datatype>
-void  BST< datatype>::preorder(ostream&out)
-{
-
-}
-
-template <typename datatype>
-void BST< datatype>::postorder(ostream&out)
-{
-
-}
-
-template <typename datatype>
-datatype BST< datatype>:: minValue(BNodeptr& root)
-{
-
-   while(root!=nullptr)
-    {
-    searchAux(root->left,value);
+template <typename T>
+typename BST<T>::NodePtr BST<T>::findMin(NodePtr subtree) const {
+    while (subtree && subtree->left) {
+        subtree = subtree->left;
     }
-    return value;
-
+    return subtree;
+}
+template <typename T>
+typename BST<T>::NodePtr BST<T>::findMax(NodePtr subtree) const {
+    while (subtree && subtree->left) {
+        subtree = subtree->right;
+    }
+    return subtree;
 }
 
-template <typename datatype>
-datatype BST< datatype>::maxValue(NodePtr& root){
-    NodePtr temp=root;
-    if(root!=nullptr){
-      while(temp->right!=nullptr){
-        temp=temp->right;
-      }
-      return temp->data;
+// Inorder traversal
+template <typename T>
+void BST<T>::inorder(std::ostream& out) const {
+    inorderAux(out, root);
+}
+
+template <typename T>
+void BST<T>::inorderAux(std::ostream& out, NodePtr subtree) const {
+    if (subtree) {
+        inorderAux(out, subtree->left);
+        out << "Age: " << subtree->data.age
+            << ", Name: " << subtree->data.name
+            << ", Income: " << subtree->data.income
+            << ", Performance: " << subtree->data.performanceScore << "\n";
+        inorderAux(out, subtree->right);
     }
 }
 
+// Preorder traversal
+template <typename T>
+void BST<T>::preorder(std::ostream& out) const {
+    preorderAux(out, root);
+}
 
+template <typename T>
+void BST<T>::preorderAux(std::ostream& out, NodePtr subtree) const {
+    if (subtree) {
+        out << subtree->data << " ";
+        preorderAux(out, subtree->left);
+        preorderAux(out, subtree->right);
+    }
+}
 
+// Postorder traversal
+template <typename T>
+void BST<T>::postorder(std::ostream& out) const {
+    postorderAux(out, root);
+}
 
+template <typename T>
+void BST<T>::postorderAux(std::ostream& out, NodePtr subtree) const {
+    if (subtree) {
+        postorderAux(out, subtree->left);
+        postorderAux(out, subtree->right);
+        out << subtree->data << " ";
+    }
+}
 
+// Get the minimum value in the BST
+template <typename T>
+T BST<T>::minValue() const {
+    NodePtr temp = findMin(root);
+    if (!temp) {
+        throw std::runtime_error("Tree is empty");
+    }
+    return temp->data;
+}
+
+// Get the maximum value in the BST
+template <typename T>
+T BST<T>::maxValue() const {
+    NodePtr temp = root;
+    while (temp && temp->right) {
+        temp = temp->right;
+    }
+    if (!temp) {
+        throw std::runtime_error("Tree is empty");
+    }
+    return temp->data;
+}
+template <typename T>
+void BST<T>::print(std::ostream& out) const {
+  printAux(out, root);
+}
