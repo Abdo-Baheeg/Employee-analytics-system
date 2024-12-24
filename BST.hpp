@@ -8,12 +8,12 @@ class BST{
 public:
     BST(){};
     bool empty();
-    void insert( datatype value);
-    void erase( datatype &value);
-    bool search( datatype value);
-    void inorder(ostream&out);
-    void preorder(ostream&out);
-    void postorder(ostream&out);
+    bool search(const datatype& value) const;
+    void insert(const datatype& value);
+    void erase(const datatype& value);
+    void inorder(ostream&out) const;
+    void preorder(ostream&out) const;
+    void postorder(ostream&out) const;
 
 private:
  class EmployeeNode{
@@ -21,19 +21,18 @@ private:
         datatype data;
         int age;           // Age of the employee
         double income;         // Monthly income
-        float performanceScore;  // Performance score
-        EmployeeNode *left;
-        EmployeeNode *right;
+        double performanceScore;  // Performance score
+        EmployeeNode* left;
+        EmployeeNode* right;
         EmployeeNode(datatype value): data(value),left(nullptr),right(nullptr){};
         EmployeeNode():left(nullptr),right(nullptr){};
-
 };
 typedef EmployeeNode* NodePtr; ;
 NodePtr root{};
 
 
 
-void  insertAux(BST<datatype>::NodePtr &root, datatype &value);
+void insertAux(BST<datatype>::NodePtr &root, datatype& value);
 bool searchAux(BST<datatype>::NodePtr &root, datatype& value);
 void inorderAux(ostream& out, BST<datatype>::NodePtr subtreePtr);
 void preorderAux(ostream& out, BST<datatype>::NodePtr subtreePtr);

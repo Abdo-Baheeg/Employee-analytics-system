@@ -7,15 +7,19 @@ template <typename datatype>
 inline bool BST< datatype>::empty(){return root==0;}
 
 template <typename datatype>
-bool  BST< datatype>::searchAux(BST<datatype>::NodePtr currentptr,const datatype value)
+bool  BST< datatype>::searchAux(BST<datatype>::NodePtr& currentptr,const datatype& value)
 {
-    if(currentptr==nullptr){return false;}
-    if(currentptr->data <value)
-        return searchAux(currentptr->right,value);
-    else if(currentptr->data >value)
-        return searchAux(currentptr->left,value);
+    if(currentptr == nullptr)    //empty tree
+        return false;
+
+    if(currentptr -> data < value)
+        return searchAux(currentptr -> right, value);    //go to right subtree
+
+    else if(currentptr -> data > value)
+        return searchAux(currentptr -> left, value);    //go to left subtree
+
     else
-       return true;
+        return true;      //this is the item
 }
 
 template <typename datatype>
@@ -25,36 +29,23 @@ bool BST< datatype>:: search( datatype value)
 }
 
 template <typename datatype>
-void BST<datatype>::insertAux(BST<datatype>::BNodeptr root, datatype value)
+void BST<datatype>::insertAux(BST<datatype>::NodePtr& root, const datatype& value)
 {
-  BNodeptr  newnode=new BST< datatype>:: BNodeptr(value);
-if(empty())
-{
-    root= newnode(value);
+    if(root == nullptr)        //empty tree
+        root = new BST<datatype>:: NodePtr(value);
 
-}
- if(value < root->data){
-    if(root->left==nullptr)
-    {
-       root->left  =newnode(value);
-    }
-    insert(value,root->left);
-}
-else if(value >root->data)
-{
-    if(root->right==nullptr)
-    {
-        root->right=newnode(value);
-    }
-    insert(root->right,value);
-}
-else {
-    cerr<<"Item already exists ";
-}
+    if(value < root->data)
+        insertAux(root->left, value);
+
+    else if(value > root->data)
+        insertAux(root->right, value);
+
+    else
+        cerr<<"Item already exists in BST" <<endl;
 }
 
 template <typename datatype>
-void BST<datatype>::  insert(const datatype value)
+void BST<datatype>::insert (const datatype& value)
 {
     return insertAux(root,value);
 }
@@ -63,7 +54,7 @@ template <typename datatype>
 void BST<datatype>::erase(const datatype& item) {
 
     bool found;
-    BST<datatype>::BNodeptr deletednode, parent; 
+    BST<datatype>::BNodeptr deletednode, parent;
     serachAux(parent,value);
 
     if (!found) {
@@ -71,12 +62,12 @@ void BST<datatype>::erase(const datatype& item) {
         return;
     }
 
-    if (deletednode->left != 0 && deletednode->right != 0) { 
+    if (deletednode->left != 0 && deletednode->right != 0) {
 
-       
+
         BST<datatype>::BinNodePointer deletednodeSuc = deletednode->right;
         parent = deletednode;
-        while (deletednodeSuc->left != 0) { 
+        while (deletednodeSuc->left != 0) {
             parent = deletednodeSuc;
             deletednodeSuc = deletednodeSuc->left;
         }
@@ -85,7 +76,7 @@ void BST<datatype>::erase(const datatype& item) {
         deletednode = deletednodeSuc;
     }
 
- 
+
     BST<datatype>::BinNodePointer subtree = deletednode->left;
     if (subtree == 0) subtree = deletednode->right;
 
