@@ -1,15 +1,7 @@
 #include<iostream>
 #include"BST.hpp"
+#include "include/vector.hpp"
 using namespace std;
-
-//employee info peter had to use 
-struct Employee {
-    int age;               // Age of the employee
-    double income;         // Monthly income
-    int performanceScore;  // Performance score
-};
-
-
 
 //                    from Quiry 8 -> 12
 //-------------------------------------------------------------------
