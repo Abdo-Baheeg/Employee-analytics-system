@@ -18,7 +18,10 @@ void BST::insert(const Employee& value) {
 void BST::insertAux(NodePtr& subtree, const Employee& employee) {
     if (subtree!=nullptr) {
         subtree = new Node(employee);
-    } else if (employee.age < subtree->key) {
+    }else if(subtree -> key == employee.age){
+      subtree -> Employees.push_back(employee);
+    }
+    else if (employee.age < subtree->key) {
         insertAux(subtree->left, employee);
     } else if (employee.age > subtree->key) {
         insertAux(subtree->right, employee);
@@ -176,6 +179,23 @@ void BST::printAux(std::ostream& out, NodePtr subtree) const {
     printAux(out, subtree->right);
 
   }
+}
+
+
+
+
+void BST:: insertEmployee(string name, int id, int age, float performanceScore,double salary) {
+    this-> insert( Employee(name,id,age,performanceScore,salary));
+}
+void BST::deleteEmployee(int age) {
+  NodePtr temp = search();
+}
+void BST :: displayEmployees() {
+
+}
+
+void BST :: operator<<(std::ostream& out) const {
+  out << "Employees: \n";
 
 }
 

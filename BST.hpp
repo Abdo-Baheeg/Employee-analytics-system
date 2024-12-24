@@ -30,7 +30,7 @@ private:
 
     // Helper functions (private)
     void insertAux(NodePtr& subtree, const Employee& value);
-    bool searchAux(NodePtr subtree, const Employee& value) const;
+    bool searchAux(NodePtr subtree, const int age) const;
     void inorderAux(std::ostream& out, NodePtr subtree) const;
     void preorderAux(std::ostream& out, NodePtr subtree) const;
     void postorderAux(std::ostream& out, NodePtr subtree) const;
@@ -49,14 +49,19 @@ public:
     // Public interface for insertion, deletion, and search
     void insert(const Employee& employee);
     void erase(const Employee& employee);
-    bool search(const Employee& employee) const;
+    bool search(int age) const;
+    Employee find( int age) const;
 
     // Traversal functions
     void inorder(std::ostream& out) const;
     void preorder(std::ostream& out) const;
     void postorder(std::ostream& out) const;
-
     void print(std::ostream& out)const;
+
+    void BST:: insertEmployee(string name, int id, int age, float performanceScore,double salary);
+    void displayEmployees();
+    void deleteEmployee(int age);
+
 };
 
 
