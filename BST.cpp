@@ -156,7 +156,7 @@ BST:: NodePtr BST::minValue() const {
 }
 
 // Get the maximum age in the BST
-int BST::maxValue() const {
+BST:: NodePtr BST::maxValue() const {
     NodePtr temp = root;
     while (temp && temp->right) {
         temp = temp->right;
@@ -168,6 +168,15 @@ int BST::maxValue() const {
 }
 void BST::print(std::ostream& out) const {
   printAux(out, root);
+}
+void BST::printAux(std::ostream& out, NodePtr subtree) const {
+  if (subtree) {
+    printAux(out, subtree->left);
+    out << subtree->key << " ";
+    printAux(out, subtree->right);
+
+  }
+
 }
 
 

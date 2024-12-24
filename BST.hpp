@@ -37,6 +37,7 @@ private:
     NodePtr eraseAux(NodePtr subtree, const Employee& value);
     NodePtr findMin(NodePtr subtree) const;
     NodePtr findMax(NodePtr subtree) const;
+    void printAux(std::ostream& out, NodePtr subtree) const;
 
 public:
     // Constructor
@@ -54,10 +55,6 @@ public:
     void inorder(std::ostream& out) const;
     void preorder(std::ostream& out) const;
     void postorder(std::ostream& out) const;
-
-    // // Utility functions
-    Employee minValue() const;
-    Employee maxValue() const;
 
     void print(std::ostream& out)const;
 };
