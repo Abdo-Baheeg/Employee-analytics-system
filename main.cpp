@@ -376,6 +376,7 @@ void EmployeeManagementMenu() {
                 cout << "Enter Employee Performance Score: ";
                 double employeePerformanceScore;
                 cin >> employeePerformanceScore;
+
                 //employees.insert(Employee())
 
                 break;

@@ -2,6 +2,7 @@
 #define VECTOR_HPP
 
 #include <iostream>
+#include <optional>
 #include <stdexcept> 
 
 template <typename T>
@@ -81,8 +82,48 @@ public:
 
 
     void clear() {
+        delete[] data;
         vec_size = 0;
     }
+
+    #include <optional>
+    // Function to find a value in the data array
+    T find(T value) const {
+        for (size_t i = 0; i < vec_size; i++) {
+            if (data[i] == value) {
+                return data[i];
+            }
+        }
+        return nullptr;
+    }
+
+    void insert(size_t index, const T& value) {
+        if (index >= vec_size) {
+            throw std::out_of_range("Index out of range");
+        }
+        data[index] = value;
+    }
+    void erase(T value) {
+        for (size_t i = 0; i < vec_size; i++) {
+            if (data[i] == value) {
+                data[i] = nullptr;
+                return;
+            }
+        }
+    }
+    T& front() {
+        if (vec_size == 0) {
+            throw std::out_of_range("Vector is empty");
+        }
+        return data[vec_size - 1];
+    }
+    T& back() {
+        if (vec_size == 0) {
+            throw std::out_of_range("Vector is empty");
+        }
+        return data[vec_size - 1];
+    }
+
 };
 
 #endif

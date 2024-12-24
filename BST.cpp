@@ -4,93 +4,102 @@
 //BST Implementation
 
 // Check if the tree is empty
-template <typename T>
-bool BST<T>::empty() const {
+
+bool BST::empty() const {
     return root == nullptr;
 }
 
 // Insert a value into the BST
-template <typename T>
-void BST<T>::insert(const T& value) {
+
+void BST::insert(const Employee& value) {
     insertAux(root, value);
 }
 
-template <typename T>
-void BST<T>::insertAux(NodePtr& subtree, const T& value) {
-    if (!subtree) {
-        subtree = new Node(value);
-    } else if (value < subtree->data) {
-        insertAux(subtree->left, value);
-    } else if (value > subtree->data) {
-        insertAux(subtree->right, value);
+void BST::insertAux(NodePtr& subtree, const Employee& employee) {
+    if (subtree!=nullptr) {
+        subtree = new Node(employee);
+    } else if (employee.age < subtree->key) {
+        insertAux(subtree->left, employee);
+    } else if (employee.age > subtree->key) {
+        insertAux(subtree->right, employee);
     }
 }
 
-// Search for a value in the BST
-template <typename T>
-bool BST<T>::search(const T& value) const {
-    return searchAux(root, value);
+// Search for a employee in the BST
+bool BST::search(const Employee& employee) const {
+    return searchAux(root, employee);
 }
 
-template <typename T>
-bool BST<T>::searchAux(NodePtr subtree, const T& value) const {
-    if (!subtree) {
+bool BST::searchAux(NodePtr subtree, const Employee& value) const {
+    if (subtree== nullptr) {
         return false;
     }
-    if (value == subtree->data) {
+    if (value.age == subtree->key) {
         return true;
-    } else if (value < subtree->data) {
+    } else if (value.age < subtree->key) {
         return searchAux(subtree->left, value);
     } else {
         return searchAux(subtree->right, value);
     }
 }
 
-// Erase a value from the BST
-template <typename T>
-void BST<T>::erase(const T& value) {
+// Erase an employee from the BST
+void BST::erase(const Employee& value) {
     root = eraseAux(root, value);
 }
 
-template <typename T>
-typename BST<T>::NodePtr BST<T>::eraseAux(NodePtr subtree, const T& value) {
+typename BST::NodePtr BST::eraseAux(NodePtr subtree, const Employee& employee) {
     if (!subtree) {
-        return nullptr;
+        return nullptr; // Tree is empty or node not found
     }
-
-    if (value < subtree->data) {
-        subtree->left = eraseAux(subtree->left, value);
-    } else if (value > subtree->data) {
-        subtree->right = eraseAux(subtree->right, value);
+    int key = employee.age;
+    if (key < subtree->key) {
+        subtree->left = eraseAux(subtree->left, employee);
+    } else if (key > subtree->key) {
+        subtree->right = eraseAux(subtree->right,employee);
     } else {
-        // Node with only one child or no child
-        if (!subtree->left) {
-            NodePtr temp = subtree->right;
-            delete subtree;
-            return temp;
-        } else if (!subtree->right) {
-            NodePtr temp = subtree->left;
-            delete subtree;
-            return temp;
+        // Key matches: Remove the specific employee from the vector
+        auto& employees = subtree->Employees;
+        Employee emp;
+        emp = employees.find(employee);
+
+        if (it != employees.end()) {
+            employees.erase(it); // Remove the employee
         }
 
-        // Node with two children: Get the inorder successor
-        NodePtr temp = findMin(subtree->right);
-        subtree->data = temp->data;
-        subtree->right = eraseAux(subtree->right, temp->data);
+        // If the Employees vector is empty, delete the node
+        if (employees.empty()) {
+            if (!subtree->left) {
+                Node* temp = subtree->right;
+                delete subtree;
+                return temp;
+            } else if (!subtree->right) {
+                Node* temp = subtree->left;
+                delete subtree;
+                return temp;
+            }
+
+            // Node with two children: Find the inorder successor
+            Node* temp = findMin(subtree->right);
+            subtree->key = temp->key;
+            subtree->Employees = temp->Employees;
+            subtree->right = eraseAux(subtree->right, temp->key, Employee{}); // Remove the successor
+            delete temp;
+        }
     }
+
     return subtree;
 }
 
-template <typename T>
-typename BST<T>::NodePtr BST<T>::findMin(NodePtr subtree) const {
+
+typename BST::NodePtr BST::findMin(NodePtr subtree) const {
     while (subtree && subtree->left) {
         subtree = subtree->left;
     }
     return subtree;
 }
-template <typename T>
-typename BST<T>::NodePtr BST<T>::findMax(NodePtr subtree) const {
+
+typename BST::NodePtr BST::findMax(NodePtr subtree) const {
     while (subtree && subtree->left) {
         subtree = subtree->right;
     }
@@ -98,56 +107,47 @@ typename BST<T>::NodePtr BST<T>::findMax(NodePtr subtree) const {
 }
 
 // Inorder traversal
-template <typename T>
-void BST<T>::inorder(std::ostream& out) const {
+void BST::inorder(std::ostream& out) const {
     inorderAux(out, root);
 }
 
-template <typename T>
-void BST<T>::inorderAux(std::ostream& out, NodePtr subtree) const {
+void BST::inorderAux(std::ostream& out, NodePtr subtree) const {
     if (subtree) {
         inorderAux(out, subtree->left);
-        out << "Age: " << subtree->data.age
-            << ", Name: " << subtree->data.name
-            << ", Income: " << subtree->data.income
-            << ", Performance: " << subtree->data.performanceScore << "\n";
+        out << subtree->key;
+
         inorderAux(out, subtree->right);
     }
 }
 
 // Preorder traversal
-template <typename T>
-void BST<T>::preorder(std::ostream& out) const {
+void BST::preorder(std::ostream& out) const {
     preorderAux(out, root);
 }
 
-template <typename T>
-void BST<T>::preorderAux(std::ostream& out, NodePtr subtree) const {
+void BST::preorderAux(std::ostream& out, NodePtr subtree) const {
     if (subtree) {
-        out << subtree->data << " ";
+        out << subtree->key << " ";
         preorderAux(out, subtree->left);
         preorderAux(out, subtree->right);
     }
 }
 
 // Postorder traversal
-template <typename T>
-void BST<T>::postorder(std::ostream& out) const {
+void BST::postorder(std::ostream& out) const {
     postorderAux(out, root);
 }
 
-template <typename T>
-void BST<T>::postorderAux(std::ostream& out, NodePtr subtree) const {
+void BST::postorderAux(std::ostream& out, NodePtr subtree) const {
     if (subtree) {
         postorderAux(out, subtree->left);
         postorderAux(out, subtree->right);
-        out << subtree->data << " ";
+        out << subtree->key << " ";
     }
 }
 
-// Get the minimum value in the BST
-template <typename T>
-T BST<T>::minValue() const {
+// Get the minimum age in the BST
+BST:: NodePtr BST::minValue() const {
     NodePtr temp = findMin(root);
     if (!temp) {
         throw std::runtime_error("Tree is empty");
@@ -155,9 +155,8 @@ T BST<T>::minValue() const {
     return temp->data;
 }
 
-// Get the maximum value in the BST
-template <typename T>
-T BST<T>::maxValue() const {
+// Get the maximum age in the BST
+int BST::maxValue() const {
     NodePtr temp = root;
     while (temp && temp->right) {
         temp = temp->right;
@@ -167,7 +166,8 @@ T BST<T>::maxValue() const {
     }
     return temp->data;
 }
-template <typename T>
-void BST<T>::print(std::ostream& out) const {
+void BST::print(std::ostream& out) const {
   printAux(out, root);
 }
+
+

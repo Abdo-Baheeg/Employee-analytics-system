@@ -8,7 +8,7 @@ using namespace std;
 class EmployeeTree {
   public:
   EmployeeTree() {
-    employees = BST<Employee>();
+    BST<Employee> employees;
   }
   void insertEmployee(string name, int id, int age, float performanceScore,double salary) {
     this->employees.insert( Employee(std::move(name),id,age,performanceScore,salary));
@@ -20,21 +20,7 @@ class EmployeeTree {
     this->employees.print();
   }
   private:
-  class Node{
-  public:
-    string name;
-    int id;
-    int age;
-    float performanceScore;
-    double salary;
-    Node(const string &name, const int id, const int age, const float performanceScore, double salary){
-      this->name = name;
-      this->id = id;
-      this->age = age;
-      this->performanceScore = performanceScore;
-      this->salary = salary;
-    }
-  };
+
 };
 
 
